@@ -20,7 +20,8 @@ author: DModel
 ###############################################
 
 navbar-links:
-  Our Projects
+  Our Projects:
+    - 4inarow
   About Us: "aboutme"
   Resources:
     - Beautiful Jekyll: "https://beautifuljekyll.com"
