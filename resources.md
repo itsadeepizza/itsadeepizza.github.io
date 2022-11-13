@@ -83,5 +83,6 @@ subtitle: Principal resources used in our projects
 - Una comodissima whiteboard gratuita online; editabile contemporaneamente da più utenti: https://app.conceptboard.com/
 - Metti da parte un articolo per più tardi: https://getpocket.com/fr/
 - Per imparare la statistica, Wasserman, "All of statistics": https://egrcc.github.io/docs/math/all-of-statistics.pdf
+- Corso di probabilità del MIT: https://www.youtube.com/playlist?list=PLUl4u3cNGP60hI9ATjSFgLZpbNJ7myAg6
 - Generare immagini da prompt (docker di Stable Diffusion): https://github.com/pieroit/stable-diffusion-jupyterlab-docker
 - Biblioteca di e-book: https://z-lib.org/ 

@@ -25,6 +25,7 @@ navbar-links:
     - CycleGAN: "projects/cycleGAN"
     - GNN: "projects/GNN"
     - NLP: "projects/NLP"
+    - All projects: "projects"
   About Us: "aboutme"
   Resources: "resources"
 

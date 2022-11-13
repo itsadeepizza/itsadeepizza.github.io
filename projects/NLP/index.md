@@ -1,7 +1,9 @@
 ---
 layout: page
-title: Notes and Resources
-subtitle: Principal resources used in our projects
+title: GNN
+subtitle: Current project
 ---
 
-Work in progress
+**Github**: [github.com/itsadeepizza/nlp](https://github.com/itsadeepizza/nlp)
+
+🚧 Work in progress
