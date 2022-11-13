@@ -10,7 +10,7 @@
 ############################
 
 # Name of website
-title: It's a Depp Pizza Blog
+title: DModel Blog
 
 # Your name to show in the footer
 author: DModel
@@ -21,11 +21,12 @@ author: DModel
 
 navbar-links:
   Our Projects:
-    - 4inarow
+    - 4inarow: "projects/4inarow"
+    - CycleGAN: "projects/cycleGAN"
+    - GNN: "projects/GNN"
+    - NLP: "projects/NLP"
   About Us: "aboutme"
-  Resources:
-    - Beautiful Jekyll: "https://beautifuljekyll.com"
-    - Learn markdown: "https://www.markdowntutorial.com/"
+  Resources: "resources"
 
 
 ################
@@ -51,7 +52,7 @@ round-avatar: true
 # Select the social network links that you want to show in the footer.
 # Uncomment the links you want to show and add your information to each one.
 social-network-links:
-  email: "someone@example.com"
+#  email: "someone@example.com"
   rss: true  # remove this line if you don't want to show an RSS link at the bottom
 #  facebook: deanattali
   github: itsadeepizza
@@ -75,7 +76,7 @@ social-network-links:
 #  mastodon: instance.url/@username
 #  ORCID: your ORCID ID
 #  google-scholar: your google scholar
-#  discord: invite/invite_code or users/userid 
+  discord: invite/Uq8xPZaFQW
 #  kaggle: yourname
 #  hackerrank: yourname
 
@@ -257,7 +258,7 @@ paginate: 5
 
 kramdown:
   input: GFM
-  math_engine: katex # you can also set this field to 'katex' or 'mathjax'
+  math_engine: mathjax # you can also set this field to 'katex' or 'mathjax'
 
 # Default YAML values (more information on Jekyll's site)
 defaults:
