@@ -1,10 +1,12 @@
 ---
 layout: post
-title: Sample blog post
-subtitle: Each post also has a subtitle
+title: A simple introduction to Reinforcement Learning
+subtitle: How we make an AI play 4 in a row
 gh-repo: daattali/beautiful-jekyll
 gh-badge: [star, fork, follow]
-tags: [test]
+tags: [reinforcement learning]
+thumbnail-img: /assets/img/meme_RL.png
+share-img: /assets/img/meme_RL.png
 comments: true
 ---
 

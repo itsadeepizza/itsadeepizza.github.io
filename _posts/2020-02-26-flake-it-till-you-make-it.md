@@ -1,10 +1,12 @@
 ---
 layout: post
-title: Simplify Word2Vec
-subtitle: Why do you need a context ?
-cover-img: /assets/img/path.jpg
-thumbnail-img: /assets/img/thumb.png
-share-img: /assets/img/path.jpg
+title: A very simple word embedding
+subtitle: It is barely even a neural network
+
+[//]: # (cover-img: /assets/img/path.jpg)
+[//]: # (thumbnail-img: /assets/img/meme_RL.png)
+
+[//]: # (share-img: /assets/img/meme_RL.png)
 tags: [books, test]
 ---
 
