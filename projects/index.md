@@ -20,4 +20,4 @@ subtitle: A list of our projects
 ---
 
 # [NLP](NLP)
-*Current project*
+*From word embedding to transformer, using italian language*
