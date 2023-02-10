@@ -25,6 +25,7 @@ navbar-links:
     - CycleGAN: "projects/cycleGAN"
     - GNN: "projects/GNN"
     - NLP: "projects/NLP"
+    - Gesture Recognition: "projects/pose_estimation"
     - All projects: "projects"
   About Us: "aboutme"
   Resources: "resources"

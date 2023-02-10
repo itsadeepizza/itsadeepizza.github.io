@@ -21,3 +21,8 @@ subtitle: A list of our projects
 
 # [NLP](NLP)
 *From word embedding to transformer, using italian language*
+
+---
+
+# [Gesture Recgnition](pose_estimation)
+*Recognize hand gestures*
