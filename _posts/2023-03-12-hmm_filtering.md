@@ -11,6 +11,7 @@ comments: true
 ---
 
 
+
 Recentemente abbiamo realizzato un modello per il riconoscimento dei gestures, sfruttando le posizioni dei landmarks determinate da MediaPipe. L’obiettivo era quello di creare una applicazione per poter utilizzare una lavagna virtuale, sulla quale si potesse scrivere o cancellare a seconda del gesto e della posizione della mano.
 ![img](/assets/img_HMM/meme1.png)
 
@@ -31,15 +32,17 @@ Queste sono considerazioni intuitive, ma come procedere per formalizzarle ed imp
 
 Se avete letto il titolo di questo post conoscete già la risposta: usando un Hidden Markov Model.
 
-**N.B.** Una alternatiiva semplice potrebbe essere quella di aggiungere una soglia (determinata euristicamente) sulla fiducia della predizione per cambiare il gesto rilevato. Un’altra richiedere che la stessa predizione venga fatta due volte di seguito. Il rischio è quello di ritrovarsi a gestire varie casisitiche sempre più complesse, con parametri scelti in modo arbitrario e senza nessuna base teorica a supporto. Invece di reinventare la ruota, meglio sfruttare un metodo che esiste già, ;che ci garantirà di avere il risultato ottimale.
+<div class="alert alert-block alert-warning">  <b>NOTE</b> Una alternatiiva semplice potrebbe essere quella di aggiungere una soglia (determinata euristicamente) sulla fiducia della predizione per cambiare il gesto rilevato. Un’altra richiedere che la stessa predizione venga fatta due volte di seguito. Il rischio è quello di ritrovarsi a gestire varie casisitiche sempre più complesse, con parametri scelti in modo arbitrario e senza nessuna base teorica a supporto. Invece di reinventare la ruota, meglio sfruttare un metodo che esiste già, ;che ci garantirà di avere il risultato ottimale. </div>
 
-**Disclaimer: per continuare è richiesto il teorema di Bayes. Se non lo conoscete pensate prima a recuperarlo !!!***
+<div class="alert alert-block alert-danger">
+<b>⚠️ Disclaimer</b> per continuare è richiesto il teorema di Bayes. Se non lo conoscete pensate prima a recuperarlo !!!
 
-Spiegazione lunga: [https://bayesmanual.com/index.html](https://bayesmanual.com/index.html)
+</div>
+Alcune risorse sul teorema di Bayes:
+ - Spiegazione lunga: [https://bayesmanual.com/index.html](https://bayesmanual.com/index.html)
+ - Video da 15 minuti (3B1B): [https://www.youtube.com/watch?v=HZGCoVF3YvM](https://www.youtube.com/watch?v=HZGCoVF3YvM)
+ - Altre risorse: [https://letmegooglethat.com/?q=bayes+theorem](https://letmegooglethat.com/?q=bayes+theorem)
 
-Video da 15 minuti (3B1B): [https://www.youtube.com/watch?v=HZGCoVF3YvM](https://www.youtube.com/watch?v=HZGCoVF3YvM)
-
-Altre risorse: [https://letmegooglethat.com/?q=bayes+theorem](https://letmegooglethat.com/?q=bayes+theorem)
 
 ![img](/assets/img_HMM/snorlax.png)
 
@@ -79,7 +82,7 @@ $$
 
 dove $$A= \left(a_{ij}\right)$$ con $$a_{ij}$$ la probabilità di transizione da uno stato $$i$$ a uno stato $$j$$.
 
-**NB** : Ricordarsi che le probabilità di transizione da uno stato all’altro dipende dal framerate, se il framerate cambia, bisognerà aggiustare le probabilità di conseguenza (più il framerate è alto, minore è la probabilità di cambiare gesture ad ogni frame). Una soluzione potrebbe essere quella di determinare la matrice di transizione  per uno step di 1ms $$A_{1ms}$$, ed dato un intervallo tra i frame di $$n$$ ms utilizzare $$A_{1ms}^n$$ (la matrice elevata alla potenza $$n$$-esima).
+<div class="alert alert-block alert-warning">  <b>NOTE</b> Ricordarsi che le probabilità di transizione da uno stato all’altro dipende dal framerate, se il framerate cambia, bisognerà aggiustare le probabilità di conseguenza (più il framerate è alto, minore è la probabilità di cambiare gesture ad ogni frame). Una soluzione potrebbe essere quella di determinare la matrice di transizione  per uno step di 1ms $A_{1ms}$, ed dato un intervallo tra i frame di $n$ ms utilizzare $A_{1ms}^n$ (la matrice elevata alla potenza $n$-esima). </div>
 
 Si potrebbe obiettare che le gesture non sono affatto nascoste, dato che la mano è ben visibile davanti ai vostri occhi. Dal punto di vista dell’applicazione però la cosa è lontana dall’essere ovvia, dato che in realtà non può conoscere con certezza quale sia il gesto eseguito dalla mano.
 
@@ -95,7 +98,7 @@ La risposta ci viene dall’ultimo ingredient e che non abbiamo ancora aggiunto:
 
 Il risultato dato dal modello è la probabilità di avere un certo gesto, a partire dai landmark osservati, ossia:
 
-$P(x_t\mid y_t)$
+$$P(x_t\mid y_t)$$
 
 Che è esattamente il contrario di ciò che ci serve! Come fare per scambiare i due termini? Usando il teorema di Bayes:
 
@@ -119,19 +122,20 @@ Ora siamo pronti per implementare il nostro filtro.
 
 ## Il Forward algorithm
 
-Per questa parte mi rifarò principalemente alla presentazione che viene fatta su Wikipedia (
-
-[https://en.wikipedia.org/wiki/Forward_algorithm](https://en.wikipedia.org/wiki/Forward_algorithm)) che ho trovato chiara e ben fatta.
+Per questa parte mi rifarò principalemente alla presentazione che viene fatta su Wikipedia ([https://en.wikipedia.org/wiki/Forward_algorithm](https://en.wikipedia.org/wiki/Forward_algorithm)) che ho trovato chiara e ben fatta.
 
 Se il nostro modello di base si limita a calcolare $p(x_i\mid y_i)$, ciò che vogliamo fare è includere l’informazione data da tutti gli stati precedenti, ossia calcolare
 
-$p(x_t\mid y_1,\dots,y_t)$
+$$p(x_t\mid y_1,\dots,y_t)$$
 
-**N.B.** Per semplicità di notazione indicheremo con la scrittura $p(y_1,\dots,y_t):=p(y_1 \cap \dots \cap y_t)$ l’intersezione di tutti gli eventi.
+
+<div class="alert alert-block alert-warning">  <b>NOTE</b>
+Per semplicità di notazione indicheremo con la scrittura $p(y_1,\dots,y_t):=p(y_1 \cap \dots \cap y_t)$ l’intersezione di tutti gli eventi.
+</div>
 
 ![img](/assets/img_HMM/hmm_gestures.png)
 
-**N.B.**: Esiste un altro algoritmo comunemente applicato nelle HMM, l’algoritmo di Viterbi. Il caso di utilizzo non è pero lo stesso: l’algoritmo di Viterbi permette infatti di ottenere la sequenza di stati nascosti più probabile, compresi quindi anche gli stati antecedenti a quello in esame. È quindi utile nel caso di un’analisi di dati su una sequenza già svolta. Nel nostro caso però non siamo interessati alla correzione della predizione per gli stati precedenti (smoothing) ma unicamente ad ottenere la migliore predizione possibile sull’ultimo stato (filtraggio). Il forward algorithm risponde a questa esigenza nel migliore dei modi, ed in modo più semplice rispetto all’algoritmo di Viterbi.
+
 Nonostante l'obiettivo finale sia determinare $p(x_{t}\mid y_{1},\dots,y_{t})$,
 useremo l'algoritmo per calcolare $\alpha_{t}(x_{t}):=p\left(x_{t},y_{1},\dots,y_{t}\right)/p\left(y_{t}\right)$,
 in modo da semplificare i calcoli nel processo di induzione. Per riottenere
@@ -189,7 +193,8 @@ Ma in realtà la probabilità di $$y_{t}$$ è completamente determinata
 dallo stato nascosto, ossia la posizione dei landmarks dipende unicamente
 dal gesto effettuato dalla mano, e non dalle posizioni nei fotogrammi
 precedenti. Quindi $$p\left(y_{t}\mid x_{t},x_{t-1},y_{1},\dots,y_{t-1}\right)=p\left(y_{t}\mid x_{t}\right)$$.
-In conseguenza di quanto detto precedentemente, 
+In conseguenza di quanto detto precedentemente:
+
 $$\begin{aligned}
 p\left(y_{t}\mid x_{t}\right) & = && \frac{p\left(y_{t}\mid x_{t}\right)p\left(y_{t}\right)}{p\left(x_{t}\right)}\\
  & = && \frac{(\mbox{output modello)}p\left(y_{t}\right)}{\mbox{frequenza }x_{t} \mbox{ nel train}}
@@ -232,3 +237,7 @@ In ogni caso l'impatto di $$\alpha_{0}(x_{0})$$
 sul processo di predizione si estingue rapidamente dopo alcuni secondi
 e non è quindi un parametro molto importante, permomeno nel nostro
 caso.
+
+<div class="alert alert-block alert-warning">  <b>NOTE</b>
+Esiste un altro algoritmo comunemente applicato nelle HMM, l’algoritmo di Viterbi. Il caso di utilizzo non è pero lo stesso: l’algoritmo di Viterbi permette infatti di ottenere la sequenza di stati nascosti più probabile, compresi quindi anche gli stati antecedenti a quello in esame. È quindi utile nel caso di un’analisi di dati su una sequenza già svolta. Nel nostro caso però non siamo interessati alla correzione della predizione per gli stati precedenti (smoothing) ma unicamente ad ottenere la migliore predizione possibile sull’ultimo stato (filtraggio). Il forward algorithm risponde a questa esigenza nel migliore dei modi, ed in modo più semplice rispetto all’algoritmo di Viterbi.
+</div>
