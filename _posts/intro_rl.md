@@ -21,7 +21,7 @@ What do you do if you want to teach your dog something like how to sit at comman
 
 
 It turns out that the same principle works on machines as well and it is called "reinforcement learning" because of the reinforcement that the machine receive after doing something that ends up into a positive reward.
-**aggiungere immagine cane biscotto e di un computer che mangia numeri**
+
 ![](https://i.imgur.com/SAVqJLa.png)
 
 ![](https://i.imgur.com/EkJQYjw.png)
