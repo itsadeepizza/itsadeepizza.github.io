@@ -141,7 +141,7 @@ Although the ultimate goal is to determine $p(x_{t}\mid y_{1},\dots,y_{t})$, we 
 $$\begin{align}
 p\left(x_{t}\mid y_{1},\dots,y_{t}\right) & = && \frac{p\left(x_{t},y_{1},\dots,y_{t}\right)p\left(y_{t}\right)}{p\left(y_{1},\dots,y_{t}\right)p\left(y_{t}\right)}\\
  & = && \frac{p\left(x_{t},y_{1},\dots,y_{t}\right)p\left(y_{t}\right)}{\sum_{x_{t}}p\left(x_{t},y_{1},\dots,y_{t}\right)p\left(y_{t}\right)}\\
- & = && \frac{\alpha_{t}(x_{t})}{\alpha_{t}}
+ & = && \frac{\alpha_{t}(x_{t})}{\sum_{x_{t}}\alpha_{t}}
 \end{align}$$
 
 
@@ -185,7 +185,7 @@ Let us consider the various terms of the product separately:
 $$p\left(y_{t}\mid x_{t},x_{t-1},y_{1},\dots,y_{t-1}\right)$$ is the probability of the observable $$y_{t}$$ (landmark positions) given the hidden state $$x_{t}$$ (gesture) and previous observables. However, the probability of $$y_{t}$$ is actually completely determined by the hidden state, that is, the position of the landmarks depends solely on the gesture performed by the hand, and not on the positions in the previous frames. Therefore, $$p\left(y_{t}\mid x_{t},x_{t-1},y_{1},\dots,y_{t-1}\right)=p\left(y_{t}\mid x_{t}\right)$$. As a result:
 
 $$\begin{aligned}
-p\left(y_{t}\mid x_{t}\right) & = && \frac{p\left(y_{t}\mid x_{t}\right)p\left(y_{t}\right)}{p\left(x_{t}\right)}\\
+p\left(y_{t}\mid x_{t}\right) & = && \frac{p\left(x_{t}\mid y_{t}\right)p\left(y_{t}\right)}{p\left(x_{t}\right)}\\
  & = && \frac{(\text{model output})p\left(y_{t}\right)}{\text{frequency of }x_{t} \text{ in the train}}
 \end{aligned}$$
 
@@ -199,12 +199,12 @@ in the recursion. Therefore, we get:
 
 $$\require{cancel}
 \begin{aligned}
-\alpha_{t}(x_{t}) & = && \sum_{x_{t-1}}\frac{p\left(y_{t}\mid x_{t}\right)\cancel{p\left(y_{t}\right)}}{p\left(x_{t}\right)}p\left(x_{t}\mid x_{t-1}\right)\alpha_{t-1}\left(x_{t-1}\right)/\cancel{p\left(y_{t}\right)}\\
- & = && \frac{p\left(y_{t}\mid x_{t}\right)}{p\left(x_{t}\right)}\sum_{x_{t-1}}p\left(x_{t}\mid x_{t-1}\right)\alpha_{t-1}\left(x_{t-1}\right)
+\alpha_{t}(x_{t}) & = && \sum_{x_{t-1}}\frac{p\left(x_{t}\mid y_{t}\right)\cancel{p\left(y_{t}\right)}}{p\left(x_{t}\right)}p\left(x_{t}\mid x_{t-1}\right)\alpha_{t-1}\left(x_{t-1}\right)/\cancel{p\left(y_{t}\right)}\\
+ & = && \frac{p\left(x_{t}\mid y_{t}\right)}{p\left(x_{t}\right)}\sum_{x_{t-1}}p\left(x_{t}\mid x_{t-1}\right)\alpha_{t-1}\left(x_{t-1}\right)
 \end{aligned}$$
 
 
-Where $$p\left(y_{t}\mid x_{t}\right)$$ is the model output, $p\left(x_{t}\right)$
+Where $$p\left(x_{t}\mid y_{t}\right)$$ is the model output, $p\left(x_{t}\right)$
 is the frequency of state $x_{t}$ in the training dataset, $p\left(x_{t}\mid x_{t-1}\right)$
 is the probability of transitioning from state $x_{t}$ to $x_{t-1}$,
 and $\alpha_{t-1}\left(x_{t-1}\right)$ is the output at the previous step of the algorithm.
