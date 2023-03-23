@@ -141,12 +141,9 @@ Although the ultimate goal is to determine $p(x_{t}\mid y_{1},\dots,y_{t})$, we 
 $$\begin{align}
 p\left(x_{t}\mid y_{1},\dots,y_{t}\right) & = && \frac{p\left(x_{t},y_{1},\dots,y_{t}\right)p\left(y_{t}\right)}{p\left(y_{1},\dots,y_{t}\right)p\left(y_{t}\right)}\\
  & = && \frac{p\left(x_{t},y_{1},\dots,y_{t}\right)p\left(y_{t}\right)}{\sum_{x_{t}}p\left(x_{t},y_{1},\dots,y_{t}\right)p\left(y_{t}\right)}\\
- & = && \frac{\alpha_{t}(x_{t})}{\sum_{x_{t}}\alpha_{t}}
+ & = && \frac{\alpha_{t}(x_{t})}{\sum_{x_{t}}\alpha_{t}(x_{t})}
 \end{align}$$
 
-
-
-where $\alpha_{t}:=p\left(y_{1},\dots,y_{t}\right)/p\left(y_{t}\right)$.
 
 In order to prove the recurrence, let:
 
