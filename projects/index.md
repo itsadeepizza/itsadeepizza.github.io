@@ -24,5 +24,9 @@ subtitle: A list of our projects
 
 ---
 
-# [Gesture Recgnition](pose_estimation)
+# [Gesture Recgnition and bayesian filtering](pose_estimation)
 *Recognize hand gestures*
+---
+
+# [Spiking Neural Network](snn)
+*A neural network with no derivative*

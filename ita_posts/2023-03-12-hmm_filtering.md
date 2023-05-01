@@ -144,8 +144,8 @@ in modo da semplificare i calcoli nel processo di induzione. Per riottenere
 la probabilità cercata applicheremo:
 
 $$\begin{align}
-p\left(x_{t}\mid y_{1},\dots,y_{t}\right) & = && \frac{p\left(x_{t},y_{1},\dots,y_{t}\right)p\left(y_{t}\right)}{p\left(y_{1},\dots,y_{t}\right)p\left(y_{t}\right)}\\
- & = && \frac{p\left(x_{t},y_{1},\dots,y_{t}\right)p\left(y_{t}\right)}{\sum_{x_{t}}p\left(x_{t},y_{1},\dots,y_{t}\right)p\left(y_{t}\right)}\\
+p\left(x_{t}\mid y_{1},\dots,y_{t}\right) & = && \frac{p\left(x_{t},y_{1},\dots,y_{t}\right)}{p\left(y_{1},\dots,y_{t}\right)} \cdot 1\\
+ & = && \frac{p\left(x_{t},y_{1},\dots,y_{t}\right)}{\sum_{x_{t}}p\left(x_{t},y_{1},\dots,y_{t}\right)} \cdot \frac{p\left(y_{t}\right)}{p\left(y_{t}\right)}\\
  & = && \frac{\alpha_{t}(x_{t})}{\alpha_{t}}
 \end{align}$$
 
@@ -198,7 +198,7 @@ precedenti. Quindi $$p\left(y_{t}\mid x_{t},x_{t-1},y_{1},\dots,y_{t-1}\right)=p
 In conseguenza di quanto detto precedentemente:
 
 $$\begin{aligned}
-p\left(y_{t}\mid x_{t}\right) & = && \frac{p\left(y_{t}\mid x_{t}\right)p\left(y_{t}\right)}{p\left(x_{t}\right)}\\
+p\left(y_{t}\mid x_{t}\right) & = && \frac{p\left(x_{t}\mid y_{t}\right)p\left(y_{t}\right)}{p\left(x_{t}\right)}\\
  & = && \frac{(\mbox{output modello)}p\left(y_{t}\right)}{\mbox{frequenza }x_{t} \mbox{ nel train}}
 \end{aligned}$$
 
@@ -216,12 +216,12 @@ induttivo nella ricorsione. Quindi otteniamo:
 
 $$\require{cancel}
 \begin{aligned}
-\alpha_{t}(x_{t}) & = && \sum_{x_{t-1}}\frac{p\left(y_{t}\mid x_{t}\right)\cancel{p\left(y_{t}\right)}}{p\left(x_{t}\right)}p\left(x_{t}\mid x_{t-1}\right)\alpha_{t-1}\left(x_{t-1}\right)/\cancel{p\left(y_{t}\right)}\\
- & = && \frac{p\left(y_{t}\mid x_{t}\right)}{p\left(x_{t}\right)}\sum_{x_{t-1}}p\left(x_{t}\mid x_{t-1}\right)\alpha_{t-1}\left(x_{t-1}\right)
+\alpha_{t}(x_{t}) & = && \sum_{x_{t-1}}\frac{p\left(x_{t}\mid y_{t}\right)\cancel{p\left(y_{t}\right)}}{p\left(x_{t}\right)}p\left(x_{t}\mid x_{t-1}\right)\alpha_{t-1}\left(x_{t-1}\right)/\cancel{p\left(y_{t}\right)}\\
+ & = && \frac{p\left(x_{t}\mid y_{t}\right)}{p\left(x_{t}\right)}\sum_{x_{t-1}}p\left(x_{t}\mid x_{t-1}\right)\alpha_{t-1}\left(x_{t-1}\right)
 \end{aligned}$$
 
 
-Dove $$p\left(y_{t}\mid x_{t}\right)$$ è l'output del modello, $p\left(x_{t}\right)$
+Dove $$p\left(x_{t}\mid y_{t}\right)$$ è l'output del modello, $p\left(x_{t}\right)$
 è la frequenza dello stato $x_{t}$ nel dtaset di train, $p\left(x_{t}\mid x_{t-1}\right)$
 è la probabilità di transizione dallo stato $x_{t}$ a $x_{t-1}$
 e $\alpha_{t-1}\left(x_{t-1}\right)$ è l'output dell'algoritmo allo
@@ -243,3 +243,43 @@ caso.
 <div class="alert alert-block alert-warning">  <b>NOTE</b>
 Esiste un altro algoritmo comunemente applicato nelle HMM, l’algoritmo di Viterbi. Il caso di utilizzo non è pero lo stesso: l’algoritmo di Viterbi permette infatti di ottenere la sequenza di stati nascosti più probabile, compresi quindi anche gli stati antecedenti a quello in esame. È quindi utile nel caso di un’analisi di dati su una sequenza già svolta. Nel nostro caso però non siamo interessati alla correzione della predizione per gli stati precedenti (smoothing) ma unicamente ad ottenere la migliore predizione possibile sull’ultimo stato (filtraggio). Il forward algorithm risponde a questa esigenza nel migliore dei modi, ed in modo più semplice rispetto all’algoritmo di Viterbi.
 </div>
+
+## Implementazione
+
+* Puoi trovare i dettagli nel [epository Github](https://github.com/itsadeepizza/pose_estimation/blob/master/gesture_recognition/test_models.py) *
+
+Ecco la nostra implementazione della classa `HMMFiltering`:
+
+```python
+class HMMFiltering():
+    def __init__(self, trans_mat, alfa_0, freqs, model):
+        """
+        :param trans_mat: Transition matrix of the HMM
+        :param alfa_0: Initial values for alpha_t
+        :param freqs: Frequencies of the hidden states in model train dataset
+        """
+        self.trans_mat = trans_mat
+        self.alfa_0 = alfa_0
+        self.freqs = freqs
+        self.alfa_t = self.alfa_0
+
+    def update_alfa(self, unfiltered_probs):
+        """Calculate alpha_t+1 given the observation y_t"""
+        first_coeff = np.array(list(unfiltered_probs.values()) )/ self.freqs
+        second_coeff = 0
+        for i in range(len(self.alfa_t)):
+            second_coeff += self.trans_mat[i] * self.alfa_t[i]
+        self.alfa_t = first_coeff * second_coeff
+        # Normalize alfa_t to avoid numerical errors
+        self.alfa_t = self.alfa_t / sum(self.alfa_t)
+
+
+    def predict_proba(self, unfiltered_probs):
+        """
+        Calculate the hidden state probability given the observation y_t.
+        Unfliltered_probs is a dictionary in the form {'name_gesture': prob, ...}
+        """
+        classes = unfiltered_probs.keys()
+        self.update_alfa(unfiltered_probs)
+        return {gesture: prob for gesture, prob in zip(classes, self.alfa_t/sum(self.alfa_t))}
+'''
