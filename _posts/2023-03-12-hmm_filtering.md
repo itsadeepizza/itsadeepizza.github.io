@@ -124,7 +124,7 @@ Now we are ready to implement our filter.
 
 For this part, I will mainly refer to the presentation made on Wikipedia (([https://en.wikipedia.org/wiki/Forward_algorithm](https://en.wikipedia.org/wiki/Forward_algorithm))), which I found clear and well-done.
 
-If our basic model only calculates $p(x_i\mid y_i)$, what we want to do is include the information given by all the previous states, i.e., calculate
+If our basic model only calculates $p(x_t\mid y_t)$, what we want to do is include the information given by all the previous states, i.e., calculate
 
 $$p(x_t\mid y_1,\dots,y_t)$$
 
@@ -139,8 +139,8 @@ For ease of notation we will note $p(y_1,\dots,y_t):=p(y_1 \cap \dots \cap y_t)$
 Although the ultimate goal is to determine $p(x_{t}\mid y_{1},\dots,y_{t})$, we will use the algorithm to compute $\alpha_{t}(x_{t}):=p\left(x_{t},y_{1},\dots,y_{t}\right)/p\left(y_{t}\right)$, in order to simplify calculations in the induction process. To obtain the desired probability, we will apply:
 
 $$\begin{align}
-p\left(x_{t}\mid y_{1},\dots,y_{t}\right) & = && \frac{p\left(x_{t},y_{1},\dots,y_{t}\right)p\left(y_{t}\right)}{p\left(y_{1},\dots,y_{t}\right)p\left(y_{t}\right)}\\
- & = && \frac{p\left(x_{t},y_{1},\dots,y_{t}\right)p\left(y_{t}\right)}{\sum_{x_{t}}p\left(x_{t},y_{1},\dots,y_{t}\right)p\left(y_{t}\right)}\\
+p\left(x_{t}\mid y_{1},\dots,y_{t}\right) & = && \frac{p\left(x_{t},y_{1},\dots,y_{t}\right)}{p\left(y_{1},\dots,y_{t}\right)} \cdot 1\\
+ & = && \frac{p\left(x_{t},y_{1},\dots,y_{t}\right)}{\sum_{x_{t}}p\left(x_{t},y_{1},\dots,y_{t}\right)} \cdot \frac{p\left(y_{t}\right)}{p\left(y_{t}\right)}\\
  & = && \frac{\alpha_{t}(x_{t})}{\alpha_{t}}
 \end{align}$$
 
@@ -185,7 +185,7 @@ Let us consider the various terms of the product separately:
 $$p\left(y_{t}\mid x_{t},x_{t-1},y_{1},\dots,y_{t-1}\right)$$ is the probability of the observable $$y_{t}$$ (landmark positions) given the hidden state $$x_{t}$$ (gesture) and previous observables. However, the probability of $$y_{t}$$ is actually completely determined by the hidden state, that is, the position of the landmarks depends solely on the gesture performed by the hand, and not on the positions in the previous frames. Therefore, $$p\left(y_{t}\mid x_{t},x_{t-1},y_{1},\dots,y_{t-1}\right)=p\left(y_{t}\mid x_{t}\right)$$. As a result:
 
 $$\begin{aligned}
-p\left(y_{t}\mid x_{t}\right) & = && \frac{p\left(y_{t}\mid x_{t}\right)p\left(y_{t}\right)}{p\left(x_{t}\right)}\\
+p\left(y_{t}\mid x_{t}\right) & = && \frac{p\left(x_{t}\mid y_{t}\right)p\left(y_{t}\right)}{p\left(x_{t}\right)}\\
  & = && \frac{(\text{model output})p\left(y_{t}\right)}{\text{frequency of }x_{t} \text{ in the train}}
 \end{aligned}$$
 
@@ -199,12 +199,12 @@ in the recursion. Therefore, we get:
 
 $$\require{cancel}
 \begin{aligned}
-\alpha_{t}(x_{t}) & = && \sum_{x_{t-1}}\frac{p\left(y_{t}\mid x_{t}\right)\cancel{p\left(y_{t}\right)}}{p\left(x_{t}\right)}p\left(x_{t}\mid x_{t-1}\right)\alpha_{t-1}\left(x_{t-1}\right)/\cancel{p\left(y_{t}\right)}\\
- & = && \frac{p\left(y_{t}\mid x_{t}\right)}{p\left(x_{t}\right)}\sum_{x_{t-1}}p\left(x_{t}\mid x_{t-1}\right)\alpha_{t-1}\left(x_{t-1}\right)
+\alpha_{t}(x_{t}) & = && \sum_{x_{t-1}}\frac{p\left(x_{t}\mid y_{t}\right)\cancel{p\left(y_{t}\right)}}{p\left(x_{t}\right)}p\left(x_{t}\mid x_{t-1}\right)\alpha_{t-1}\left(x_{t-1}\right)/\cancel{p\left(y_{t}\right)}\\
+ & = && \frac{p\left(x_{t}\mid y_{t}\right)}{p\left(x_{t}\right)}\sum_{x_{t-1}}p\left(x_{t}\mid x_{t-1}\right)\alpha_{t-1}\left(x_{t-1}\right)
 \end{aligned}$$
 
 
-Where $$p\left(y_{t}\mid x_{t}\right)$$ is the model output, $p\left(x_{t}\right)$
+Where $$p\left(x_{t}\mid y_{t}\right)$$ is the model output, $p\left(x_{t}\right)$
 is the frequency of state $x_{t}$ in the training dataset, $p\left(x_{t}\mid x_{t-1}\right)$
 is the probability of transitioning from state $x_{t}$ to $x_{t-1}$,
 and $\alpha_{t-1}\left(x_{t-1}\right)$ is the output at the previous step of the algorithm.
@@ -214,5 +214,47 @@ The only missing piece is the induction base, namely the value of $$\alpha_{0}(x
 In any case, the impact of $$\alpha_{0}(x_{0})$$ on the prediction process quickly dissipates after a few seconds and is therefore not a very important parameter, at least in our case.
 
 <div class="alert alert-block alert-warning">  <b>NOTE</b>
-There is another algorithm commonly used in HMMs, the Viterbi algorithm. However, the use case is not the same: the Viterbi algorithm allows us to obtain the most probable sequence of hidden states, including the states preceding the one under consideration. It is therefore useful in the case of data analysis on an already completed sequence. In our case, however, we are not interested in correcting the prediction for the preceding states (smoothing) but only in obtaining the best possible prediction for the last state (filtering). The forward algorithm meets this need in the best possible way, and is simpler than the Viterbi algorithm. 
+There is another algorithm commonly used in HMMs, the <b>Viterbi algorithm</b>. 
+However, the use case is not the same: the Viterbi algorithm allows us to obtain the most probable sequence of hidden states, 
+including the states preceding the one under consideration. It is therefore useful in the case of data analysis on an already completed sequence. In our case, however, we are not interested in correcting the prediction for the preceding states (smoothing) but only in obtaining the best possible prediction for the last state (filtering). The forward algorithm meets this need in the best possible way, and is simpler than the Viterbi algorithm. 
 </div>
+
+## Implementation
+
+* You can find detail of the implementation in the [Github repository](https://github.com/itsadeepizza/pose_estimation/blob/master/gesture_recognition/test_models.py) *
+
+Here the implementation of our class `HMMFiltering`:
+
+```python
+class HMMFiltering():
+    def __init__(self, trans_mat, alfa_0, freqs, model):
+        """
+        :param trans_mat: Transition matrix of the HMM
+        :param alfa_0: Initial values for alpha_t
+        :param freqs: Frequencies of the hidden states in model train dataset
+        """
+        self.trans_mat = trans_mat
+        self.alfa_0 = alfa_0
+        self.freqs = freqs
+        self.alfa_t = self.alfa_0
+
+    def update_alfa(self, unfiltered_probs):
+        """Calculate alpha_t+1 given the observation y_t"""
+        first_coeff = np.array(list(unfiltered_probs.values()) )/ self.freqs
+        second_coeff = 0
+        for i in range(len(self.alfa_t)):
+            second_coeff += self.trans_mat[i] * self.alfa_t[i]
+        self.alfa_t = first_coeff * second_coeff
+        # Normalize alfa_t to avoid numerical errors
+        self.alfa_t = self.alfa_t / sum(self.alfa_t)
+
+
+    def predict_proba(self, unfiltered_probs):
+        """
+        Calculate the hidden state probability given the observation y_t.
+        Unfliltered_probs is a dictionary in the form {'name_gesture': prob, ...}
+        """
+        classes = unfiltered_probs.keys()
+        self.update_alfa(unfiltered_probs)
+        return {gesture: prob for gesture, prob in zip(classes, self.alfa_t/sum(self.alfa_t))}
+'''
