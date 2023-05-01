@@ -246,9 +246,14 @@ Esiste un altro algoritmo comunemente applicato nelle HMM, l’algoritmo di Vite
 
 ## Implementazione
 
-* Puoi trovare i dettagli nel [epository Github](https://github.com/itsadeepizza/pose_estimation/blob/master/gesture_recognition/test_models.py) *
+* Puoi trovare i dettagli nel [repository Github](https://github.com/itsadeepizza/pose_estimation/blob/master/gesture_recognition/test_models.py) *
 
-Ecco la nostra implementazione della classa `HMMFiltering`:
+Ecco una dimostrazione del risultato ottenuto:
+![gif](/assets/img_HMM/hmm_filter_test.gif)
+Notare che grazie al filtraggio, anche se su alcuni fotogrammi il modello sbaglia (attribuendo il risultato "spiderman" o "mano chiusa"), il risultato filtrato è più stabile e corretto.
+
+
+Ed ecco la nostra implementazione della classe `HMMFiltering`:
 
 ```python
 class HMMFiltering():
@@ -256,8 +261,7 @@ class HMMFiltering():
         """
         :param trans_mat: Transition matrix of the HMM
         :param alfa_0: Initial values for alpha_t
-        :param freqs: Frequencies of the hidden states in model train dataset
-        """
+        :param freqs: Frequencies of the hidden states in model train dataset"""
         self.trans_mat = trans_mat
         self.alfa_0 = alfa_0
         self.freqs = freqs
@@ -282,4 +286,4 @@ class HMMFiltering():
         classes = unfiltered_probs.keys()
         self.update_alfa(unfiltered_probs)
         return {gesture: prob for gesture, prob in zip(classes, self.alfa_t/sum(self.alfa_t))}
-'''
+```

@@ -222,6 +222,9 @@ including the states preceding the one under consideration. It is therefore usef
 ## Implementation
 
 * You can find detail of the implementation in the [Github repository](https://github.com/itsadeepizza/pose_estimation/blob/master/gesture_recognition/test_models.py) *
+Here a demo of the result:
+![gif](/assets/img_HMM/hmm_filter_test.gif)
+It should be noted that filtering enables greater accuracy and stability in the results, even when the model makes mistakes in identifying certain frames as "Spiderman" or "closed hand
 
 Here the implementation of our class `HMMFiltering`:
 
