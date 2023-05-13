@@ -5,31 +5,40 @@ subtitle: A list of our projects
 ---
 
 # [CycleGAN](cycleGAN)
-*Convert a photo in a Monet painting*
+*Convert a photo to a Monet painting*
+
 Oct 2021 - Dec 2021
+
 ---
 
 # [Reinforcement learning](4inarow)
 *Train an AI to play (and win) 4 in a row*
-Jan 2022 - Avr 2022
+
+Jan 2022 - Apr 2022
 
 ---
 
 # [GNN](GNN)
 *Use Graph Neural Network to simulate physics*
-Mai 2022 - Sept 2022
+
+May 2022 - Sept 2022
+
 ---
 
-# [NLP](NLP)
+# [NLP (Language Model)](NLP)
 *From word embedding to transformer, using italian language*
+
 Oct 2022 - Jan 2023
+
 ---
 
 # [Gesture Recgnition and bayesian filtering](pose_estimation)
-*Recognize hand gestures*
----
-Feb 2023 - Avr 2023
+*Draw on a virtual whiteboard just moving your hands*
 
+Feb 2023 - Apr 2023
+
+---
 # [Spiking Neural Network](snn)
-*A neural network with no derivative*
-Mai 2023 - 
+*Perform some classical ML tasks (Iris dataset, MNIST) using a SNN coded in numpy*
+
+May 2023 - 

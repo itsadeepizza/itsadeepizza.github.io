@@ -1,8 +1,8 @@
 ---
 layout: page
 title: Spiking Neural Network
-subtitle: Impelment a SNN to recognize digits in the MNIST dataset from scratch
+subtitle: Implement a SNN to recognize digits in the MNIST dataset from scratch
 ---
-**Github**: [github.com/itsadeepizza/snn](https://github.com/itsadeepizza/snn)
+**Github**: [github.com/itsadeepizza/SNN](https://github.com/itsadeepizza/SNN)
 
 🚧 Work in progress
