@@ -287,3 +287,16 @@ class HMMFiltering():
         self.update_alfa(unfiltered_probs)
         return {gesture: prob for gesture, prob in zip(classes, self.alfa_t/sum(self.alfa_t))}
 ```
+
+## Lavagna virtuale
+
+Ecco un esempio di HMM filtering applicato alla [nostra lavagna virtuale](https://github.com/itsadeepizza/pose_estimation):
+
+**Modello semplice**:
+
+![](../projects/pose_estimation/images/no_filter_spiral.gif)
+
+
+**Con HMM Filtering**:
+
+![](../projects/pose_estimation/images/filtered_spiral.gif)

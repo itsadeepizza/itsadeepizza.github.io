@@ -260,4 +260,18 @@ class HMMFiltering():
         classes = unfiltered_probs.keys()
         self.update_alfa(unfiltered_probs)
         return {gesture: prob for gesture, prob in zip(classes, self.alfa_t/sum(self.alfa_t))}
-'''
+```
+
+
+## Virtual Whiteboard
+
+Here an exemple of HMM filtering applied to [our virtual whiteboard](https://github.com/itsadeepizza/pose_estimation):
+
+**Plain model**:
+
+![](../projects/pose_estimation/images/no_filter_spiral.gif)
+
+
+**With HMM Filtering**:
+
+![](../projects/pose_estimation/images/filtered_spiral.gif)
