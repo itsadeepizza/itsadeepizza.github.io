@@ -41,4 +41,10 @@ Feb 2023 - Apr 2023
 # [Spiking Neural Network](snn)
 *Perform some classical ML tasks (Iris dataset, MNIST) using a SNN coded in numpy*
 
-May 2023 - 
+May 2023 - Aug 2023
+
+---
+# [Variational AutoEncoder](VAE)
+*A VAE approach to denoise sound samples*
+
+Sept 2023 - 
