@@ -111,17 +111,18 @@ Despite the use of different encoding strategies and hyperparameter tuning attem
 
 [SVRS] A. Sboev, D. Vlasov, R. Rybka, A. Serenko: *Solving a classification task by spiking neurons with STDP and temporal coding* Procedia Computer Science, Vol 123,
 pp 494-500, 2018
-https://www.sciencedirect.com/science/article/pii/S1877050918300760)
+[https://www.sciencedirect.com/science/article/pii/S1877050918300760](https://www.sciencedirect.com/science/article/pii/S1877050918300760)
 
 [BBJHCK] Z. Bing, I. Baumann, Z. Jiang, K. Huang, C. Cai, A. Knol: *Supervised Learning in SNN via Reward-Modulated Spike-Timing-Dependent Plasticity for a Target Reaching Vehicle*, Frontiers in Neurorobotics, Vol. 13, 2019
-https://www.frontiersin.org/articles/10.3389/fnbot.2019.00018  
+[https://www.frontiersin.org/articles/10.3389/fnbot.2019.00018](https://www.frontiersin.org/articles/10.3389/fnbot.2019.00018)
+
 
 
 [VCS] R. Vaila, J. Chiasson, V. Saxena: *Deep Convolutional Spiking Neural Networks for Image Classification*, 2019
-https://arxiv.org/abs/1903.12272
+[https://arxiv.org/abs/1903.12272](https://arxiv.org/abs/1903.12272)
 
 [TM] A. Tavanaei, A. S. Maida: *BP-STDP: Approximating Backpropagation using Spike Timing Dependent Plasticity*, 2017
-https://arxiv.org/abs/1711.04214
+[https://arxiv.org/abs/1711.04214](https://arxiv.org/abs/1711.04214)
 
 
 
