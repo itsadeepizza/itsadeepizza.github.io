@@ -2,7 +2,7 @@
 
 source "https://rubygems.org"
 
-gemspec
+#gemspec
 
 gem 'github-pages', '~> 227'
 gem 'jekyll-paginate'
